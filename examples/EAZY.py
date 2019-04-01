@@ -49,10 +49,8 @@ for f in filters: noise[f] = np.random.normal(center, sigma, m.Fnu[f].shape) # M
 
 background = 2. # nJy # noise
 
-completeness_limit = 5. * background # the completeness limit (currently def\
-ined by an error function)
-stretch = 0.5 # stretches error function. if stretch is very big the erf bec\
-omes a step
+completeness_limit = 5. * background # the completeness limit (currently defined by an error function)
+stretch = 0.5 # stretches error function. if stretch is very big the erf becomes a step
 
 N = 1000
 
@@ -80,7 +78,4 @@ os.system(eazy_software_location + ' -p '+eazy_input_location+'/zphot'+eazy_iden
 eazy_output_location = '/'
 
 z_mc = np.loadtxt(eazy_output_location+'photz'+eazy_identifier+'.zout', usecols = -1)
-
-
-
 
