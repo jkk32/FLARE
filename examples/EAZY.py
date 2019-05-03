@@ -39,10 +39,7 @@ filters = FLARE.filters.Euclid
 
 noise_value = 10. # nJy
 
-noise = {f: noise_value for f in filters} # set noise to be the same in each band  
-
-
-F = FLARE.filters.add_filters(filters, new_lam = m.lam * (1. + z)) 
+F = FLARE.filters.add_filters(filters, new_lam = m.lam * (1. + z))
 
 # --- generates Fnu (broad band fluxes)
  
@@ -51,23 +48,9 @@ m.get_Fnu(F) #  generate observed frame broad band fluxes # in nJy
 for f in filters: print('{f}: {flux}/nJy'.format(f = f, flux = m.Fnu[f]))
 
 # --- add noise [JK to do]
-center = 2.
-sigma = 1.
 
-noise = {}
-for f in filters: noise[f] = np.random.normal(center, sigma, m.Fnu[f].shape) # MAYBE??
+noise = {f: np.random.normal(0., noise_value, m.Fnu[f].shape) for f in filters} # set noise to be the same in each band
 
-background = 2. # nJy # noise
-
-completeness_limit = 5. * background # the completeness limit (currently defined by an error function)
-stretch = 0.5 # stretches error function. if stretch is very big the erf becomes a step
-
-N = 1000
-
-bwL = 0.05
-bwz = 0.05
-
-logL1500 = logL1500_middle - bwL/2. + bwL * np.random.random(N)
 
 # --- create EAZY filter RES file
 
@@ -88,4 +71,3 @@ os.system(eazy_software_location + ' -p '+eazy_input_location+'/zphot'+eazy_iden
 eazy_output_location = '/'
 
 z_mc = np.loadtxt(eazy_output_location+'photz'+eazy_identifier+'.zout', usecols = -1)
-
