@@ -4,15 +4,10 @@ import numpy as np
 
 import scipy.integrate as cp
 import scipy.interpolate as cpi
-import scipy.special as cps
-
-from mpmath import gammainc
-
-import matplotlib.pyplot as plt
 
 import csv
 
-from FLARE.photom import flux_to_L, lum_to_flux, M_to_lum, lum_to_M
+from FLARE.photom import M_to_lum, lum_to_M
 import FLARE.core
 
 import FLARE.LF.lf_parameters as lf_parameters
