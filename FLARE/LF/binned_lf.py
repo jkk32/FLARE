@@ -9,6 +9,7 @@ class FLARES:
         self.redshifts = np.array([5, 6, 7, 8, 9, 10])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'FLARES, Vijayan+2020'
         lf['ArXiv'] = 'https://arxiv.org/abs/2008.06057'
@@ -31,6 +32,7 @@ class Finkelstein15:
         self.redshifts = np.array([5, 6, 7, 8])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Finkelstein+2015'
         lf['ArXiv'] = 'https://arxiv.org/abs/1410.5439'
@@ -51,6 +53,7 @@ class Atek18:
         self.redshifts = np.array([6])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Atek+2018'
         lf['ArXiv'] = 'https://arxiv.org/abs/1412.1472v3'
@@ -68,6 +71,7 @@ class Bouwens15:
         self.redshifts = np.array([5, 6, 7, 8, 10])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Bouwens+2015'
         lf['ArXiv'] = 'https://arxiv.org/abs/1403.4295'
@@ -89,6 +93,7 @@ class Bouwens16:
         self.redshifts = np.array([9, 10])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Bouwens+2016'
         lf['ArXiv'] = 'https://arxiv.org/abs/1506.01035'
@@ -107,6 +112,7 @@ class Bouwens17:
         self.redshifts = np.array([6])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Bouwens+2017'
         lf['ArXiv'] = 'https://arxiv.org/abs/1610.00283'
@@ -124,6 +130,7 @@ class Bowler20:
         self.redshifts = np.array([8, 9])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Bowler+2020'
         lf['ArXiv'] = 'https://arxiv.org/abs/1911.12832'
@@ -142,6 +149,7 @@ class McLeod15:
         self.redshifts = np.array([9])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'McLeod+2015'
         lf['ArXiv'] = 'https://arxiv.org/abs/1412.1472'
@@ -159,6 +167,7 @@ class Oesch18:
         self.redshifts = np.array([10])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Oesch+2018'
         lf['ArXiv'] = 'https://arxiv.org/abs/1710.11131'
@@ -176,6 +185,7 @@ class Stefanon19:
         self.redshifts = np.array([8, 9])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Stefanon+2019'
         lf['ArXiv'] = 'https://arxiv.org/abs/1902.10713?'
@@ -194,6 +204,7 @@ class template:
         self.redshifts = np.array([5, 6, 7, 8])
 
         lf = {}
+        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'template'
         lf['ArXiv'] = ''

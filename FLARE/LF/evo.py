@@ -450,3 +450,58 @@ def write_model_parameters_csv(model_list, filename='lf_parameters'):
                     output_writer.writerow([m.name, m.ref, m.type, m.LF_model, redshift, phistar, log10L, Mstar, alpha, 'N/A', m.ads, m.arxiv])
 
     return
+
+
+def write_binned_lf_csv(lf_list, filename='binned_lf'):
+
+    headers = ['Reference', 'Redshift', 'phi / 10^-3', 'log10L', 'M', 'phi_lo / 10^-3', 'phi_hi / 10^-3', 'uplim', 'ADS', 'arXiv']
+
+    if type(lf_list) != list:
+        lf_list = [lf_list]
+
+    with open(f'{filename}.csv', mode='w', newline='') as output_file:
+        output_writer = csv.writer(output_file, delimiter=',')
+
+        output_writer.writerow(headers)
+
+        for lf in lf_list:
+
+            m = get_lf(lf)
+
+            for z in m['redshifts']:
+                for i, phi in enumerate(m['LF'][str(z)]['phi']):
+                    redshift = f'{z:.4f}'
+                    phi = m['LF'][str(z)]['phi'][i] * 10**3
+                    phi = f'{phi:.4f}'
+                    M = m['LF'][str(z)]['M'][i]
+                    log10L = f'{np.log10(M_to_lum(M)):.4f}'
+                    M = f'{M:.4f}'
+                    uplims = m['LF'][str(z)]['uplim'][i]
+                    if not m['log_err']:
+                        if not m['both_err']:
+                            phi_lo = m['LF'][str(z)]['phi_err'][i] * 10**3
+                            phi_hi = m['LF'][str(z)]['phi_err'][i] * 10**3
+                            phi_lo = f'{phi_lo:.4f}'
+                            phi_hi = f'{phi_hi:.4f}'
+                        else:
+                            phi_lo = m['LF'][str(z)]['phi_err'][0][i] * 10**3
+                            phi_hi = m['LF'][str(z)]['phi_err'][1][i] * 10**3
+                            phi_lo = f'{phi_lo:.4f}'
+                            phi_hi = f'{phi_hi:.4f}'
+
+                    else:
+                        if not m['both_err']:
+                            phi_lo = (m['LF'][str(z)]['phi'][i] - 10**(np.log10(m['LF'][str(z)]['phi'][i]) - m['LF'][str(z)]['phi_err'][i])) * 10**3
+                            phi_hi = (10**(np.log10(m['LF'][str(z)]['phi'][i]) + m['LF'][str(z)]['phi_err'][i]) - m['LF'][str(z)]['phi'][i]) * 10**3
+                            phi_lo = f'{phi_lo:.4f}'
+                            phi_hi = f'{phi_hi:.4f}'
+                        else:
+                            phi_lo = (m['LF'][str(z)]['phi'][i] - 10**(np.log10(m['LF'][str(z)]['phi'][i]) - m['LF'][str(z)]['phi_err'][0][i])) * 10**3
+                            phi_hi = (10**(np.log10(m['LF'][str(z)]['phi'][i]) + m['LF'][str(z)]['phi_err'][0][i]) - m['LF'][str(z)]['phi'][i]) * 10**3
+                            phi_lo = f'{phi_lo:.4f}'
+                            phi_hi = f'{phi_hi:.4f}'
+
+
+                    output_writer.writerow([m['label'], redshift, phi, log10L, M, phi_lo, phi_hi, uplims, m['ADS'], m['ArXiv']])
+
+    return
