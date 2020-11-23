@@ -414,3 +414,144 @@ def lf_multi(zs, log10L_bin_centres, models, binned_lf=False, legend=False):
 
 
     return fig
+
+
+
+def evo_plot(bin_edges, N, binned_lf=False, cosmo=False, f_limits=False, save_file=False, legend=False):
+    return
+
+def lf_for_z_binnedlf(z, log10L_bin_centres, models, binned_lf=False, legend=False):
+    # THIS WILL BE individual LF plot
+
+    markers = ['D', 's', 'h', '^', 'o', '*', 'v']
+
+    cmap = mpl.cm.tab20
+    cmap_marker = mpl.cm.Dark2_r
+
+
+    fig = plt.figure()
+
+    if type(models) == str:
+        models = [models]
+
+
+    for i, model in enumerate(models):
+
+        m = getattr(lf_parameters, model)()
+
+        if hasattr(m, 'beta'):
+            s = abs(np.array(m.redshifts) - z) < 0.5
+
+            x = 0.4 * (lum_to_M(10 ** log10L_bin_centres) - np.array(m.M_star)[s][0])
+            phistar = 10 ** np.array(m.phi_star)[s][0]
+            alpha = np.array(m.alpha)[s][0]
+            beta = np.array(m.beta)[s][0]
+
+            phi = phistar / (10 ** (x * (alpha + 1)) + 10 ** (x * (beta + 1)))
+
+            plt.plot(log10L_bin_centres, np.log10(phi), c=cmap(i / 19), alpha=0.6)
+
+        else:
+
+            s = abs(np.array(m.redshifts) - z) < 0.5
+
+            x = 10**(log10L_bin_centres - np.log10(M_to_lum(np.array(m.M_star)[s][0])))
+            phistar = 10**np.array(m.phi_star)[s][0]
+            alpha = np.array(m.alpha)[s][0]
+            plt.plot(log10L_bin_centres, np.log10(phistar*(x)**(alpha + 1) * np.exp(-x)), c=cmap(i / 19), alpha=0.6)
+
+
+    if binned_lf:
+        if type(binned_lf) == list:
+            for l, lf in enumerate(binned_lf):
+                try:
+                    q = abs(np.array([float(k) for k in [*lf['LF'].keys()]]) - z) < 0.5
+                    z_key = str(int(np.array([float(k) for k in [*lf['LF'].keys()]])[q]))
+                    log10L_bin = np.log10(M_to_lum(np.array(lf['LF'][str(int(z_key))]['M'])))
+                    phi_bin = np.array(lf['LF'][str(int(z_key))]['phi'])
+                    err = np.array(lf['LF'][str(int(z_key))]['phi_err'])
+                    uplims = lf['LF'][str(int(z_key))]['uplim']
+
+                    if lf['both_err']:
+                        if lf['log_err']:
+                            phi_err = err
+                        else:
+                            phi_err = [logerr_lo(phi_bin, err[0], uplims), logerr_hi(phi_bin, err[1])]
+                    else:
+                        if lf['log_err']:
+                            phi_err = err
+                        else:
+                            phi_err = [logerr_lo(phi_bin, err, uplims), logerr_hi(phi_bin, err)]
+
+                    plt.errorbar(log10L_bin, np.log10(phi_bin), yerr=phi_err, color=cmap_marker(l / 7), linestyle='',
+                                marker=markers[l], mec='k', alpha=0.8, zorder=50 + l,
+                                markersize=3, elinewidth=1, capsize=1, capthick=1, uplims=uplims)
+
+                except:
+                    print('')
+
+
+        else:
+            try:
+                q = abs(np.array([float(k) for k in [*binned_lf['LF'].keys()]]) - z) < 0.5
+                z_key = str(int(np.array([float(k) for k in [*binned_lf['LF'].keys()]])[q]))
+                log10L_bin = np.log10(M_to_lum(np.array(binned_lf['LF'][str(int(z_key))]['M'])))
+                phi_bin = np.array(binned_lf['LF'][str(int(z_key))]['phi'])
+                err = np.array(binned_lf['LF'][str(int(z_key))]['phi_err'])
+                uplims = binned_lf['LF'][str(int(z_key))]['uplim']
+                if binned_lf['both_err']:
+                    if binned_lf['log_err']:
+                        phi_err = err
+                    else:
+                        phi_err = [logerr_lo(phi_bin, err[0], uplims), logerr_hi(phi_bin, err[1])]
+                        print(phi_err)
+                else:
+                    if binned_lf['log_err']:
+                        phi_err = err
+                    else:
+                        phi_err = [logerr_lo(phi_bin, err, uplims), logerr_hi(phi_bin, err)]
+                plt.errorbar(log10L_bin, np.log10(phi_bin), yerr=phi_err, fmt='kD', alpha=0.6, zorder=50, markersize=3,
+                            elinewidth=1, capsize=1, capthick=1, uplims=uplims)
+
+            except:
+                print('')
+
+
+    plt.ylabel(r'$\rm log_{10}(\phi \; / \; cMpc^{-3} \; dex^{-1})$')
+    plt.xlabel(r"$\rm log_{10}(L_{UV} \; / \; erg\, s^{-1}\, Hz^{-1})$")
+
+    if legend:
+
+        g = []
+        for i, model in enumerate(models):
+            label = getattr(lf_parameters, model)().label
+            g.append(Line2D([-99., -98.], [-99., -98.], color=cmap(i / 19), label=label, alpha=0.6))
+
+
+        if binned_lf:
+
+            if type(binned_lf) == list:
+
+                for l, lf in enumerate(binned_lf):
+                    g.append(
+                        plt.errorbar(-99., -99., yerr=1., color=cmap_marker(l / 7), linestyle='', marker=markers[l],
+                                     mec='k', alpha=0.6, label=lf['label'], markersize=3, elinewidth=1, capsize=1,
+                                     capthick=1))
+                plt.legend(handles=g, loc='lower left', fontsize=6)
+
+            else:
+
+                for l in range(1):
+                    g.append(
+                        plt.errorbar(-99., -99., yerr=1., fmt='kD', alpha=0.6, label=binned_lf['label'], markersize=3,
+                                     elinewidth=1, capsize=1, capthick=1))
+                plt.legend(handles=g, loc='lower left', fontsize=6)
+
+
+        plt.legend(handles=g, loc='best', fontsize=10)
+
+    plt.ylim(-9., -1.5)
+    plt.xlim([min(log10L_bin_centres), max(log10L_bin_centres)])
+
+
+    return fig

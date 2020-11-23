@@ -167,14 +167,13 @@ class Oesch18:
         self.redshifts = np.array([10])
 
         lf = {}
-        lf['redshifts'] = self.redshifts
         lf['LF'] = {}
         lf['label'] = 'Oesch+2018'
         lf['ArXiv'] = 'https://arxiv.org/abs/1710.11131'
         lf['ADS'] = 'https://ui.adsabs.harvard.edu/abs/2018ApJ...855..105O/abstract'
         lf['both_err'] = True           # Switch for marking where data has separate + and - errors
         lf['log_err'] = False           # Switch for marking an error on log10(phi)
-        lf['LF']['10'] = {'phi': [0.0000017, 0.0000010, 0.0000340, 0.0001900, 0.0006300], 'M': [-22.25, -21.25, -19.25, -18.25, -17.25], 'phi_err': [[0.0000005, 0.0000008, 0.0000220, 0.0001200, 0.0005200], [0.0000000, 0.0000022, 0.0000450, 0.0002500, 0.0014900]], 'uplim': [1, 0, 0, 0, 0]}
+        lf['LF']['10'] = {'phi': [0.0000017, 0.0000010, 0.000010, 0.0000340, 0.0001900, 0.0006300], 'M': [-22.25, -21.25, -20.25, -19.25, -18.25, -17.25], 'phi_err': [[0.0000005, 0.0000008, 0.000005, 0.0000220, 0.0001200, 0.0005200], [0.0000000, 0.0000022, 0.000010, 0.0000450, 0.0002500, 0.0014900]], 'uplim': [1, 0, 0, 0, 0, 0]}
 
         self.lf = lf
 
